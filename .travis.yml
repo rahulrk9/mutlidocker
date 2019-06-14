@@ -1,4 +1,9 @@
 sudo: required
+language: node_js
+
+node_js:
+    - "8"
+    
 services:
   - docker
 
@@ -20,4 +25,3 @@ after_success:
   - docker push rahulrk9/multi-nginx
   - docker push rahulrk9/multi-server
   - docker push rahulrk9/multi-worker
-  
