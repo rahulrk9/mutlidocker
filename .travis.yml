@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t rahulrk9/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run rahulrk9/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t rahulrk9/multi-client ./client
+  - docker build -t rahulrk9/multi-nginx ./nginx
+  - docker build -t rahulrk9/multi-server ./server
+  - docker build -t rahulrk9/multi-worker ./worker
+  #login to Docker hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #push images to docker hub
+  - docker push rahulrk9/multi-client
+  - docker push rahulrk9/multi-nginx
+  - docker push rahulrk9/multi-server
+  - docker push rahulrk9/multi-worker
+  
